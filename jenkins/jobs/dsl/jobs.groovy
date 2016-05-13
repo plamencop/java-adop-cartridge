@@ -48,8 +48,7 @@ steps {
 		''')
 		maven{
 		  rootPOM('FestivalPortal/pom.xml')
-          goals('clean org.jacoco:jacoco-maven-plugin:prepare-agent 
-				install')
+          goals('clean org.jacoco:jacoco-maven-plugin:prepare-agent install')
           mavenInstallation("ADOP Maven")
 		}
 		shell('''!#/bin/bash
