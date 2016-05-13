@@ -20,7 +20,7 @@ def usecase2_pipeline = buildPipelineView(projectFolderName + "/FestivalPortal_P
 usecase2_pipeline.with{
     title('Festival Portal Pipeline')
     displayedBuilds(5)
-    selectedJob(set2_FolderName + "/FestivalPortal_CodeAnalysis")
+    selectedJob(projectFolderName + "/FestivalPortal_CodeAnalysis")
     showPipelineParameters()
     refreshFrequency(5)
 }
