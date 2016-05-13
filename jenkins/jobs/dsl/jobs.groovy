@@ -210,19 +210,16 @@ wrappers {
         sshAgent("adop-jenkins-master")
     }
 steps {
-	maven{
-          rootPOM('FestivalPortal/pom.xml')
-          goals('')
-          mavenInstallation("ADOP Maven")
-        }
-	shell('''#!/bin/bash
-set -e
-namespace=$( echo "JavaTraining-Faculty" | sed "s#[\\/_ ]#-#g" )
 
-ssh -o StrictHostKeyChecking=no -tt ec2-user@${namespace}-CI.node.adop.consul "sudo rm -rf /data/tomcat/webapps/*"
-scp -o StrictHostKeyChecking=no $WORKSPACE/FestivalPortal/target/FestivalPortal.war ec2-user@${namespace}-CI.node.adop.consul:/data/tomcat/webapps/FestivalPortal.war
-ssh -o StrictHostKeyChecking=no -tt ec2-user@${namespace}-CI.node.adop.consul "sudo docker restart JT-Tomcat"
-		''')	
+configure { project ->
+    	project / 'builders' / 'hudson.plugins.copyartifact.CopyArtifact' {
+        			project("FestivalPortal_Build")
+        			filter("FestivalPortal/target/FestivalPortal.war")
+        			target("")
+				excludes("")
+				doNotFingerprintArtifacts("false")
+      	  		}
+	   } 
     }
 	configure { project ->
     	project / 'publishers' / 'hudson.plugins.deploy.DeployPublisher' {
