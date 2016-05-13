@@ -43,7 +43,7 @@ steps {
           goals('clean install')
           mavenInstallation("ADOP Maven")
         }
-		shell('''!#/bin/bash
+		shell('''#!/bin/bash
 		echo "Code Analysis on $BUILD is complete!!"
 		''')
 		maven{
@@ -51,7 +51,7 @@ steps {
           goals('clean org.jacoco:jacoco-maven-plugin:prepare-agent install')
           mavenInstallation("ADOP Maven")
 		}
-		shell('''!#/bin/bash
+		shell('''#!/bin/bash
 		echo "ANALYSIS SUCCESSFUL, you can browse http://$(curl http://169.254.169.254/latest/meta-data/public-ipv4)/sonar/dashboard/index/FestivalPortal:FestivalPortal"
 		''')	
     }
@@ -92,7 +92,7 @@ steps {
           goals('')
           mavenInstallation("ADOP Maven")
         }
-		shell('''!#/bin/bash
+		shell('''#!/bin/bash
 		set -e
 		git_data=$(git --git-dir "${WORKSPACE}/.git" log -1 --pretty="format:%an<br/>%s%b")
 		echo "GIT_LOG_DATA=${git_data}" > git_log_data.properties
@@ -215,7 +215,7 @@ steps {
           goals('')
           mavenInstallation("ADOP Maven")
         }
-	shell('''!#/bin/bash
+	shell('''#!/bin/bash
 set -e
 namespace=$( echo "JavaTraining-Faculty" | sed "s#[\\/_ ]#-#g" )
 
