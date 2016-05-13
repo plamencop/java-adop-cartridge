@@ -89,7 +89,7 @@ triggers {
 steps {
         maven{
           rootPOM('FestivalPortal/pom.xml')
-          goals('')
+          goals('compile')
           mavenInstallation("ADOP Maven")
         }
 		shell('''#!/bin/bash
@@ -100,7 +100,7 @@ steps {
 		environmentVariables {
         propertiesFile('git_log_data.properties')
 		}
-		groovyCommand('''import hudson.model.*; 
+		systemGroovyCommand('''import hudson.model.*; 
 					  import hudson.util.*;
 					  // Get current build number
 					  def currentBuildNum = build.getEnvironment(listener).get('BUILD_NUMBER')
@@ -199,7 +199,7 @@ scm{
 wrappers {
 		configure { project ->
     	project / 'buildWrappers' / 'org.jenkinsci.plugins.environmentdashboard.DashboardBuilder' {
-        			nameofEnv("JavaTraining-Faculty-CI")
+        			nameOfEnv("JavaTraining-Faculty-CI")
         			componentName("FestivalPortal")
         			buildNumber('$(BUILD_NUMBER)')
 				buildjob("")
