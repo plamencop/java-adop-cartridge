@@ -211,8 +211,8 @@ wrappers {
     }
 steps {
 
-configure { project ->
-    	project / 'builders' / 'hudson.plugins.copyartifact.CopyArtifact' {
+configure { projects ->
+    	projects / 'builders' / 'hudson.plugins.copyartifact.CopyArtifact' {
         			project("FestivalPortal_Build")
         			filter("FestivalPortal/target/FestivalPortal.war")
         			target("")
