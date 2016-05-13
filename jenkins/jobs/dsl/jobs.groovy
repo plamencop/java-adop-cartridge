@@ -100,7 +100,7 @@ steps {
 		environmentVariables {
         propertiesFile('git_log_data.properties')
 		}
-		groovyCommand(import hudson.model.*; 
+		groovyCommand('''import hudson.model.*; 
 					  import hudson.util.*;
 					  // Get current build number
 					  def currentBuildNum = build.getEnvironment(listener).get('BUILD_NUMBER')
@@ -118,7 +118,7 @@ steps {
 
 					 // Remove old params - Plugins inject variables!
 					 currentBuild.actions.remove(oldParams)
-					 currentBuild.addAction(new ParametersAction(params));)
+					 currentBuild.addAction(new ParametersAction(params));''')
 
 		
     }
