@@ -10,7 +10,6 @@ def solutioncodebase = "ssh://jenkins@gerrit:29418/Workspace/Java/java-faculty.g
 def build = freeStyleJob(projectFolderName + "/FestivalPortal_Build")
 def codeanalysis = freeStyleJob(projectFolderName + "/FestivalPortal_CodeAnalysis")
 def testautomation = freeStyleJob(projectFolderName + "/FestivalPortal_TestAutomation")
-//def deptoprod = freeStyleJob(projectFolderName + "/FestivalPortal_Deploy_to_Prod")
 def junit = freeStyleJob(projectFolderName + "/FestivalPortal_JUnit")
 def nexus = freeStyleJob(projectFolderName + "/FestivalPortal_Deploy_to_Nexus")
 def deptodev = freeStyleJob(projectFolderName + "/FestivalPortal_Deploy_to_Dev")
@@ -165,6 +164,17 @@ publishers {
 }
 
 nexus.with{
+//NEXUS
+//Error 413: Entity too large
+//sol. nginx.conf
+       //client_max_body_size 2M;
+
+//Error 401: Auth something... (repo isn't accessible)
+//sol. use different repo
+
+//Error: file already exist
+//sol. Dversion=$BUILD_ID
+
 scm{
     git{
       remote{
@@ -174,6 +184,20 @@ scm{
       branch("*/master")
     }
   }
+ steps{
+	maven{
+		rootPOM('FestivalPortal/pom.xml')
+		goals('deploy:deploy-file 
+    -Durl=http://52.50.49.253/nexus/content/repositories/releases/
+    -DrepositoryId=releases
+    -DgroupId=org.java
+    -DartifactId=festivalportal
+    -Dversion=$BUILD_ID
+    -Dpackaging=war
+    -Dfile=$WORKSPACE/archive/FestivalPortal/target/FestivalPortal.war')
+		mavenInstallation("ADOP Maven")
+		}
+	}
 publishers {
 		downstreamParameterized {
             trigger(projectFolderName + "/FestivalPortal_Deploy_to_Dev") {
@@ -249,10 +273,29 @@ publishers {
 }
 
 testautomation.with{
+	scm{
+    git{
+      remote{
+        url(solutioncodebase)
+        credentials("adop-jenkins-master")
+      }
+      branch("*/master")
+    }
+  }
 wrappers {
 preBuildCleanup()	
 }
+steps {
+maven{
+	rootPOM('FestivalPortal/pom.xml')
+	goals('test')
+	mavenInstallation("ADOP Maven")
 }
+}
+
+
+}
+
 
 
 
